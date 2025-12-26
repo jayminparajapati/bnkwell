@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BNKWellness | The Gold Standard of Ayurveda</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; scroll-behavior: smooth; }
+        .parallax-bg {
+            background-attachment: fixed;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+        .glass-nav { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(10px); }
+        [x-cloak] { display: none !important; }
+    </style>
+</head>
+<body class="bg-white text-slate-900" x-data="wellnessApp()" x-cloak>
+
+    <nav class="glass-nav fixed w-full z-50 border-b border-gray-100">
+        <div class="max-w-7xl mx-auto px-6 h-20 flex justify-between items-center">
+            <div class="flex items-center gap-10">
+                <h1 class="text-2xl font-black text-emerald-900 tracking-tighter">BNK<span class="text-emerald-500">WELLNESS</span></h1>
+                <div class="hidden lg:flex gap-6 text-sm font-bold uppercase tracking-tight text-slate-600">
+                    <a href="#shop" class="hover:text-emerald-600 transition">Shop Products</a>
+                    <a href="#benefits" class="hover:text-emerald-600 transition">Our Process</a>
+                    <a href="#experts" class="hover:text-emerald-600 transition">Consult Doctor</a>
+                </div>
+            </div>
+            <div class="flex items-center gap-6">
+                <div class="relative cursor-pointer group" @click="showCart = true">
+                    <svg class="w-7 h-7 group-hover:text-emerald-600 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="1.5" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
+                    <span class="absolute -top-1 -right-2 bg-emerald-600 text-white text-[10px] font-bold h-5 w-5 rounded-full flex items-center justify-center" x-text="cart.length"></span>
+                </div>
+                <button class="bg-emerald-900 text-white px-6 py-2.5 rounded-full text-sm font-bold hover:shadow-lg transition">Login / Register</button>
+            </div>
+        </div>
+    </nav>
+
+    <section class="relative h-screen flex items-center justify-center overflow-hidden">
+        <div class="absolute inset-0 parallax-bg z-0 scale-110" style="background-image: url('https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?q=80&w=2000');"></div>
+        <div class="absolute inset-0 bg-emerald-950/40 z-10"></div>
+        
+        <div class="relative z-20 text-center text-white px-4">
+            <p class="uppercase tracking-[0.3em] text-sm font-bold mb-4 opacity-90">Rooted in Science • Pure by Nature</p>
+            <h2 class="text-6xl md:text-8xl font-black mb-8 leading-none">RECLAIM YOUR <br><span class="text-emerald-400 italic">VITALITY.</span></h2>
+            <div class="flex flex-col md:flex-row justify-center gap-4">
+                <a href="#shop" class="bg-emerald-500 hover:bg-emerald-400 text-emerald-950 px-10 py-5 rounded-full font-black text-lg transition-all transform hover:scale-105 shadow-2xl">SHOP THE COLLECTION</a>
+                <a href="#experts" class="bg-white/10 backdrop-blur-md border border-white/30 hover:bg-white/20 text-white px-10 py-5 rounded-full font-black text-lg transition-all">FREE DOCTOR CONSULT</a>
+            </div>
+        </div>
+    </section>
+
+    <div class="bg-emerald-50 py-10 border-b border-emerald-100">
+        <div class="max-w-7xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-8">
+            <div class="flex items-center gap-4 border-r border-emerald-200 last:border-0">
+                <span class="text-3xl">🌿</span>
+                <p class="text-xs font-black uppercase leading-tight">100% Organic<br><span class="font-normal text-slate-500">No Additives</span></p>
+            </div>
+            <div class="flex items-center gap-4 border-r border-emerald-200 last:border-0">
+                <span class="text-3xl">🔬</span>
+                <p class="text-xs font-black uppercase leading-tight">Lab Tested<br><span class="font-normal text-slate-500">Safety First</span></p>
+            </div>
+            <div class="flex items-center gap-4 border-r border-emerald-200 last:border-0">
+                <span class="text-3xl">👩‍⚕️</span>
+                <p class="text-xs font-black uppercase leading-tight">Ayush Certified<br><span class="font-normal text-slate-500">Authentic</span></p>
+            </div>
+            <div class="flex items-center gap-4">
+                <span class="text-3xl">📦</span>
+                <p class="text-xs font-black uppercase leading-tight">Free Shipping<br><span class="font-normal text-slate-500">Orders above ₹499</span></p>
+            </div>
+        </div>
+    </div>
+
+    <section id="shop" class="py-24 max-w-7xl mx-auto px-6">
+        <div class="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
+            <div class="max-w-xl">
+                <h3 class="text-4xl font-black text-slate-900 mb-4 tracking-tighter">Bestselling Formulations</h3>
+                <p class="text-slate-500 text-lg">Every product is crafted with precision to solve modern health problems using ancient wisdom.</p>
+            </div>
+            <div class="flex bg-slate-100 p-1 rounded-full gap-2 overflow-x-auto">
+                <template x-for="cat in categories">
+                    <button 
+                        @click="activeCategory = cat" 
+                        class="px-6 py-2 rounded-full text-sm font-bold transition whitespace-nowrap"
+                        :class="activeCategory === cat ? 'bg-white shadow text-emerald-700' : 'text-slate-500'"
+                        x-text="cat">
+                    </button>
+                </template>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
+            <template x-for="product in filteredProducts()" :key="product.id">
+                <div class="group relative bg-white p-4 rounded-3xl border border-slate-100 shadow-sm hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2">
+                    <div class="relative overflow-hidden rounded-2xl aspect-square mb-6">
+                        <span class="absolute top-4 left-4 z-10 bg-emerald-600 text-white text-[10px] font-black px-3 py-1 rounded-full" x-text="product.discount"></span>
+                        <img :src="product.image" :alt="product.name" class="w-full h-full object-cover group-hover:scale-110 transition duration-700">
+                    </div>
+                    <p class="text-[10px] font-black uppercase text-emerald-600 tracking-widest mb-1" x-text="product.category"></p>
+                    <h4 class="font-bold text-slate-900 mb-2 truncate" x-text="product.name"></h4>
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <span class="text-xl font-black text-emerald-900" x-text="'₹' + product.price"></span>
+                            <span class="text-sm text-slate-400 line-through ml-2" x-text="'₹' + product.oldPrice"></span>
+                        </div>
+                        <button 
+                            @click="addToCart(product)"
+                            class="bg-emerald-900 text-white p-3 rounded-xl hover:bg-emerald-600 shadow-lg transition transform active:scale-95">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                        </button>
+                    </div>
+                </div>
+            </template>
+        </div>
+    </section>
+
+    <section id="benefits" class="relative py-32 bg-slate-900 text-white overflow-hidden">
+        <div class="absolute top-0 right-0 w-1/3 h-full opacity-10 parallax-bg" style="background-image: url('https://images.unsplash.com/photo-1512106374988-c95f566d39ef?q=80&w=1000');"></div>
+        <div class="max-w-7xl mx-auto px-6 relative z-10">
+            <div class="grid lg:grid-cols-2 gap-20 items-center">
+                <div>
+                    <h2 class="text-5xl font-black mb-8 tracking-tighter">Why BNKWellness <br><span class="text-emerald-400 underline decoration-wavy">Actually Works</span></h2>
+                    <div class="space-y-8">
+                        <div class="flex gap-6">
+                            <div class="flex-shrink-0 w-12 h-12 rounded-full bg-emerald-500/20 border border-emerald-500 flex items-center justify-center font-bold text-emerald-400">01</div>
+                            <div>
+                                <h4 class="text-xl font-bold mb-2">Purity in Extraction</h4>
+                                <p class="text-slate-400">We use the Kwath method for our juices and Cold-pressed technology for oils to ensure 100% nutrient retention.</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-6">
+                            <div class="flex-shrink-0 w-12 h-12 rounded-full bg-emerald-500/20 border border-emerald-500 flex items-center justify-center font-bold text-emerald-400">02</div>
+                            <div>
+                                <h4 class="text-xl font-bold mb-2">Verified Sourcing</h4>
+                                <p class="text-slate-400">Our Shilajit is sourced from 18,000 ft in the Himalayas, and our Aloe Vera from the Thar Desert.</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-6">
+                            <div class="flex-shrink-0 w-12 h-12 rounded-full bg-emerald-500/20 border border-emerald-500 flex items-center justify-center font-bold text-emerald-400">03</div>
+                            <div>
+                                <h4 class="text-xl font-bold mb-2">Sustainable Packaging</h4>
+                                <p class="text-slate-400">We use recyclable glass bottles for our premium range to prevent chemical leaching from plastics.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <img src="data:image/jpeg;base64,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" class="rounded-3xl mt-12 shadow-2xl" alt="process">
+                    <img src="https://images.unsplash.com/photo-1615485290382-441e4d049cb5?q=80&w=600" class="rounded-3xl shadow-2xl" alt="process 2">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="experts" class="py-24 bg-white">
+        <div class="max-w-7xl mx-auto px-6 text-center">
+            <h3 class="text-4xl font-black mb-12 tracking-tighter text-slate-900">Talk to Our Doctors</h3>
+            <div class="grid md:grid-cols-3 gap-8">
+                <template x-for="doc in 3">
+                    <div class="p-8 rounded-3xl border border-slate-100 hover:border-emerald-200 transition bg-slate-50/50">
+                        <img :src="`https://i.pravatar.cc/150?img=${doc+10}`" class="w-24 h-24 rounded-full mx-auto mb-6 grayscale hover:grayscale-0 transition duration-500">
+                        <h4 class="text-xl font-bold mb-1">Dr. S. Sharma</h4>
+                        <p class="text-emerald-600 font-bold text-sm mb-4">Ayurvedic Specialist (B.A.M.S)</p>
+                        <p class="text-slate-500 text-sm mb-6 leading-relaxed">Expert in metabolic health and hormonal balance with 15+ years experience.</p>
+                        <button class="w-full py-3 rounded-full border border-emerald-900 text-emerald-900 font-bold hover:bg-emerald-900 hover:text-white transition">Book Free Appointment</button>
+                    </div>
+                </template>
+            </div>
+        </div>
+    </section>
+
+    <div x-show="showCart" class="fixed inset-0 z-[100]" style="display: none;">
+        <div class="absolute inset-0 bg-emerald-950/60 backdrop-blur-sm" @click="showCart = false"></div>
+        <div class="absolute inset-y-0 right-0 max-w-md w-full bg-white shadow-2xl flex flex-col transform transition-all duration-500">
+            <div class="p-8 border-b flex justify-between items-center bg-slate-50">
+                <h2 class="text-2xl font-black text-emerald-900 uppercase">Your Bag</h2>
+                <button @click="showCart = false" class="text-slate-400 hover:text-red-500 transition">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+            <div class="flex-1 overflow-y-auto p-8 bg-white">
+                <template x-if="cart.length === 0">
+                    <div class="text-center py-20">
+                        <span class="text-6xl block mb-6">🛒</span>
+                        <p class="text-slate-400 font-bold uppercase tracking-widest">Your bag is empty.</p>
+                        <button @click="showCart = false" class="mt-6 text-emerald-600 font-bold underline">Start Shopping</button>
+                    </div>
+                </template>
+                <template x-for="(item, index) in cart" :key="index">
+                    <div class="flex gap-6 mb-8 items-center bg-slate-50 p-4 rounded-2xl group">
+                        <img :src="item.image" class="w-20 h-20 object-cover rounded-xl shadow-md group-hover:rotate-3 transition">
+                        <div class="flex-1">
+                            <h4 class="font-bold text-slate-900" x-text="item.name"></h4>
+                            <p class="text-emerald-700 font-black" x-text="'₹' + item.price"></p>
+                            <button @click="removeFromCart(index)" class="text-[10px] text-red-400 mt-2 font-black uppercase tracking-widest hover:text-red-600">Delete Item</button>
+                        </div>
+                    </div>
+                </template>
+            </div>
+            <div class="p-8 border-t bg-emerald-50">
+                <div class="flex justify-between text-2xl font-black text-emerald-950 mb-6 uppercase tracking-tighter">
+                    <span>Total Amount</span>
+                    <span x-text="'₹' + cartTotal()"></span>
+                </div>
+                <button @click="alert('Checkout Database Integrated!')" class="w-full bg-emerald-900 text-white py-5 rounded-2xl font-black text-lg hover:bg-emerald-700 shadow-xl transition transform active:scale-95">PROCEED TO PAY</button>
+            </div>
+        </div>
+    </div>
+
+    <footer class="bg-emerald-950 text-emerald-50 py-20">
+        <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-12 border-b border-emerald-900 pb-20 mb-10">
+            <div class="col-span-1 md:col-span-2">
+                <h1 class="text-3xl font-black mb-6 tracking-tighter uppercase">BNK<span class="text-emerald-500">WELLNESS</span></h1>
+                <p class="text-emerald-200/60 max-w-sm mb-8 text-lg">We are on a mission to bring modern wellness to every home through authentic, lab-tested Ayurveda.</p>
+                <div class="flex gap-4">
+                    <div class="w-10 h-10 rounded-full bg-emerald-900 flex items-center justify-center cursor-pointer hover:bg-emerald-500 transition">IG</div>
+                    <div class="w-10 h-10 rounded-full bg-emerald-900 flex items-center justify-center cursor-pointer hover:bg-emerald-500 transition">FB</div>
+                    <div class="w-10 h-10 rounded-full bg-emerald-900 flex items-center justify-center cursor-pointer hover:bg-emerald-500 transition">TW</div>
+                </div>
+            </div>
+            <div>
+                <h5 class="font-black mb-6 uppercase tracking-widest text-emerald-500">Shop</h5>
+                <ul class="space-y-4 text-emerald-100/70 text-sm font-medium">
+                    <li><a href="#" class="hover:text-emerald-300">Men's Health</a></li>
+                    <li><a href="#" class="hover:text-emerald-300">Weight Care</a></li>
+                    <li><a href="#" class="hover:text-emerald-300">Daily Wellness</a></li>
+                </ul>
+            </div>
+            <div>
+                <h5 class="font-black mb-6 uppercase tracking-widest text-emerald-500">Contact</h5>
+                <ul class="space-y-4 text-emerald-100/70 text-sm font-medium">
+                    <li>jaiminkatakiya7600@gmail.com</li>
+                    <li>+91 7600960404</li>
+                    <li>Bbhavnagar,gujarat,India</li>
+                </ul>
+            </div>
+        </div>
+        <div class="text-center text-xs text-emerald-200/30 uppercase tracking-[0.4em]">
+            © 2025 BNK Wellness Global privatr limited.
+        </div>
+    </footer>
+
+    <script>
+        function wellnessApp() {
+            return {
+                showCart: false,
+                activeCategory: 'All',
+                categories: ['All', 'Energy', 'Skin', 'Chronic', 'Daily'],
+                
+                products: [
+                    { id: 1, name: 'Himalayan Shilajit Resin', category: 'Energy', price: 999, oldPrice: 1499, discount: '33% OFF', image: 'https://encrypted-tbn0.gstatic.com/shopping?q=tbn:ANd9GcR0b1l5NGM6eiAsZTQfFw4qoyKVxR2E1FFNQzkwUhJUDLbx1hKTX8BBlqRvmtK_1IKC4aknWv8wXgsOLAJG9KWAxnTSvJMaVUjoN0WzxGy4jksFLi3-yUDLCbtNc5Kf2-7I&usqp=CAc' },
+                    { id: 2, name: 'Glow Mix Skin Superfood', category: 'Skin', price: 850, oldPrice: 1100, discount: '22% OFF', image: 'data:image/jpeg;base64,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c5adLCOwt3cFdSYsYpbse9mVty9oIv2KY5abMXX5+mrqtYmP9UY3UMqqlpihdGxgIBc0tLusm61KRsO+vK5pYBd+ZmZob4j1FdGpx6eWUO3kznM96XtdYea2q0Zql09W6eYF73nX7EQ2/WbDkOxRMWmO6iclst5vaNNytoadwG6D2udktIWk2ANra2vo71DitjZPCqebEaiKsp2yBjbsDxf4RF/UVRQzsc14qA10uc+VYjPbgb879t/MvqNk6R2JVstRTOka2OFkbnNtYEF3k6315+dV4+UW1ML41ERry+lpcMoYKYtjpImi3vQ3RczYX7Li2NytAyCYRttwFuQX0MeCiQAVE9Q8cC3eZQfABdGiw+moIdzSwMiZe9mC1ytUJm0/clkV+TsRdK9LrJ2clmWrGyhLHdsPFjfBRuoz97Z6IWdksgr3MXyUfohRuIfkY/QCtSyCno8B4wxegE6NB8jF6AV4assiDX6NB8hF6ATo0HyEfoBbOUJZBrdGg+Rj9AKOiwc4Y/QC2sqZUGsKeEcImeiFm2NrRZrQB2CyuyhMoQVWSytslkFVkVmVEFpaCoLQs0sgryhC1Z2U2QU5VIarbJZBiGqcqyUIIyplUogjKlgpRBGVMqlEEZUspRBjZSpRAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERB//Z' },
+                    { id: 3, name: 'Ashwagandha Gold Mix', category: 'Energy', price: 599, oldPrice: 799, discount: '25% OFF', image: 'https://encrypted-tbn3.gstatic.com/shopping?q=tbn:ANd9GcQBTo_HhdWwJgYlMEs3m3DUdornvgHuTx1pjRyjgKobuZbIuhW-K8x9YEv1SZfPZxS75-uqykuPcTqcjudyV2otZQK8ArnZwox6RWvCKTTOBC5FzAAQs1__XV8NjBKVsTW7qLSS4A&usqp=CAc' },
+                    { id: 4, name: 'Dia Free Chronic Juice', category: 'Chronic', price: 1299, oldPrice: 1599, discount: '18% OFF', image: 'https://encrypted-tbn3.gstatic.com/shopping?q=tbn:ANd9GcT60ueETopj7dxu4myMIKTqROL09Oaa3g3ltnJs00UBcOmpPan46qjEc4kuWJlk6hUXihWCWYDb3zUNvwUZGVj6jqovr00MsrRkGt9N2WNk0PgCojnjB_i7t-P7Rj4hrc7WqLo4jKU&usqp=CAc' },
+                    { id: 6, name: 'Tulsi Anti-Acne Wash', category: 'Skin', price: 299, oldPrice: 450, discount: '30% OFF', image: 'https://encrypted-tbn1.gstatic.com/shopping?q=tbn:ANd9GcTY1gGc6BcXTn8Evynq2lygChoVJH5cfX85xh_AXGQ-BD1b_ffB-P6pdZZ3nfet4nHJLcxWjxlGAlCmpO96DdA-Sh32U-1Xp0mETFHvBz-UIYjQKWL_aF6mgUP1OyApfIRfvREjcA&usqp=CAc' },
+                    { id: 7, name: 'Triphala Digestion Juice', category: 'Daily', price: 499, oldPrice: 650, discount: '23% OFF', image: 'https://encrypted-tbn3.gstatic.com/shopping?q=tbn:ANd9GcT_BBBZC1MGY9LJzQhr9IiyV8eOuBvy0RkWeK6rCPI9faQCi3525IlUSW7s9Fhws9ZW_sodx8fpLOs7mstgV583sgU26VdIvqi601PimhrOeLT8yQ3FeulUlBMGOeRNhh8t4rorbfE&usqp=CAc' },
+                    { id: 8, name: 'Safed Musli Capsules', category: 'Energy', price: 749, oldPrice: 999, discount: '25% OFF', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQcpiU1lrQhQiIiTgpKveYo95GHcuQBUvSXPQ&s' }
+                ],
+                
+                cart: JSON.parse(localStorage.getItem('bnk_wellness_db')) || [],
+
+                filteredProducts() {
+                    if (this.activeCategory === 'All') return this.products;
+                    return this.products.filter(p => p.category === this.activeCategory);
+                },
+                
+                addToCart(product) {
+                    this.cart.push({...product});
+                    this.saveDB();
+                    this.showCart = true;
+                },
+                
+                removeFromCart(index) {
+                    this.cart.splice(index, 1);
+                    this.saveDB();
+                },
+                
+                saveDB() {
+                    localStorage.setItem('bnk_wellness_db', JSON.stringify(this.cart));
+                },
+                
+                cartTotal() {
+                    return this.cart.reduce((sum, item) => sum + item.price, 0);
+                }
+            }
+        }
+    </script>
+</body>
+</html>
